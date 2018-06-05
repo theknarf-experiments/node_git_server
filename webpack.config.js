@@ -1,12 +1,8 @@
-module.exports = {
-	entry: './src/app/index.js',
-	mode: 'development',
-	output: {
-		filename: 'server_routes.js',
-		libraryTarget: 'commonjs2'
-	},
-	module: {
-		rules: [
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+
+const plugins = [ new MiniCssExtractPlugin() ];
+const modules  = {
+	rules: [
 		{
 			test: /\.js$/,
 			exclude: /node_modules/,
@@ -22,17 +18,33 @@ module.exports = {
 				}
 			}
 		},
+		{ test: /\.(png|jpg|gif)$/, loader: 'file-loader' },
 		{
-			test: /\.(png|jpg|gif)$/,
-			use: [
-			{
-				loader: 'file-loader',
-				options: {}
-			}
-			]
+			test: /\.scss$/,
+			use: [ MiniCssExtractPlugin.loader,  "css-loader", "sass-loader" ]
 		}
-		]
-	},
-	target: 'node',
-	externals: [require('webpack-node-externals')()]
+	]
 }
+
+module.exports = [
+	{
+		entry: './src/app/index.js',
+		output: {
+			filename: 'server_routes.js',
+			libraryTarget: 'commonjs2'
+		},
+		target: 'node',
+		externals: [ require('webpack-node-externals')() ],
+		module: modules,
+		plugins,
+	},
+	{
+		entry: './src/app/frontend.js',
+		output: {
+			filename: 'frontend.js'
+		},
+		target: 'web',
+		module: modules,
+		plugins,
+	}
+]
