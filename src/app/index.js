@@ -10,8 +10,10 @@ let router = express.Router();
 router.get('/', signin_frontpage);
 router.get('/frontpage', frontpage);
 
-router.get('/success', (req, res) => {
-	res.send(<b> Success </b>);
-});
+router.post(
+	'/signin', 
+	passport.authenticate('local', { failureRedirect: '/' }),
+	(req, res) => { res.redirect('/frontpage'); }
+);
 
 export default router;

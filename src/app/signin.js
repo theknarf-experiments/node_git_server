@@ -1,5 +1,4 @@
 import dom, {sls} from '../dom.js';
-//import pic from '../img/DeathtoStock_NotStock.jpg';
 
 const importAll = (r)   => r.keys().map(r);
 const random    = (arr) => arr[Math.floor(Math.random() * arr.length)];

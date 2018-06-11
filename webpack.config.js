@@ -1,30 +1,31 @@
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 const plugins = [ new MiniCssExtractPlugin() ];
-const modules  = {
-	rules: [
+const rules = opts => [
+	{
+		test: /\.js$/,
+		exclude: /node_modules/,
+		use: [
 		{
-			test: /\.js$/,
-			exclude: /node_modules/,
-			use: {
-				loader: 'babel-loader',
-				options: {
-					presets: ['env', 'react'],
-					plugins: [
-						["transform-react-jsx", {
-							"pragma": "dom" // default pragma is React.createElement
-						}]
-					]
-				}
+			loader: 'babel-loader',
+			options: {
+				presets: ['env', 'react'],
+				plugins: [
+					["transform-react-jsx", {
+						"pragma": "dom" // default pragma is React.createElement
+					}]
+				]
 			}
 		},
-		{ test: /\.(png|jpg|gif)$/, loader: 'file-loader' },
-		{
-			test: /\.scss$/,
-			use: [ MiniCssExtractPlugin.loader,  "css-loader", "sass-loader" ]
-		}
-	]
-}
+		{ loader: 'ifdef-loader', options: opts }
+		]
+	},
+	{ test: /\.(png|jpg|gif)$/, loader: 'file-loader' },
+	{
+		test: /\.scss$/,
+		use: [ MiniCssExtractPlugin.loader,  "css-loader", "sass-loader" ]
+	}
+];
 
 module.exports = [
 	{
@@ -35,7 +36,7 @@ module.exports = [
 		},
 		target: 'node',
 		externals: [ require('webpack-node-externals')() ],
-		module: modules,
+		module: { rules: rules({FRONTEND: false}) },
 		plugins,
 	},
 	{
@@ -44,7 +45,7 @@ module.exports = [
 			filename: 'frontend.js'
 		},
 		target: 'web',
-		module: modules,
+		module: { rules: rules({FRONTEND: true}) },
 		plugins,
 	}
 ]

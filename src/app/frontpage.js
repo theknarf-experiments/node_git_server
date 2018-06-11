@@ -1,5 +1,8 @@
 import dom, {sls} from '../dom.js';
 require('../css/main.scss');
+/// #if FRONTEND
+import { WiredButton, WiredInput } from "wired-elements"
+/// #endif
 
 export default function frontpage_page(req, res) {
 	res.send(
