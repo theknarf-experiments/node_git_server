@@ -9,13 +9,40 @@ function attr_fix(key, value) {
 	return `${key}="${value}"`;
 }
 
+export function MDXTag(props) {
+  const {
+    name,
+    parentName,
+    props: childProps = {},
+    children,
+    components = {},
+    Layout
+  } = props
+  const Component = name;
+
+  if (Layout) {
+    return <Layout components={components}>
+      <Component {...childProps}>{children}</Component>
+    </Layout>
+  }
+
+  return <Component {...childProps}>{children}</Component>
+}
+
 export default function dom(type, attributes, ...children) {
 	const attr = Object
 		.keys(attributes || {})
 		.map(key => attr_fix(key, attributes[key]))
 		.join(' ');
 
-	 return `<${type} ${attr}> ${children.join('')} </${type}>`;
+	if(typeof type == "function") {
+		var props = attributes || {};
+		props.components = {};
+		props.children = children;
+		return type(props);
+	}
+
+	return `<${type} ${attr}> ${children.join('')} </${type}>`;
 }
 
 export function sls(strings, ...values) {  

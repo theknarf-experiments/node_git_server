@@ -17,7 +17,31 @@ const rules = opts => [
 				]
 			}
 		},
-		{ loader: 'ifdef-loader', options: opts }
+		{ loader: 'ifdef-loader', options: opts },
+		]
+	},
+	{
+		test: /\.md$/,
+		use: [
+		{
+			loader: 'babel-loader',
+			options: {
+				presets: ['env', 'react'],
+				plugins: [
+					["transform-react-jsx", {
+						"pragma": "dom" // default pragma is React.createElement
+					}]
+				]
+			}
+		},
+		{ loader: './mdx-jsx-loader.js', options: {
+			process: (data) => {
+				return `
+				import dom, {MDXTag} from '../dom.js';
+				${data}
+				`
+			}	
+		}  },
 		]
 	},
 	{ test: /\.(png|jpg|gif)$/, loader: 'file-loader' },
