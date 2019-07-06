@@ -1,11 +1,12 @@
-import dom, {sls} from '../dom.js';
+import {sls} from '../dom.js';
+import { dom } from 'isomorphic-jsx';
 
 const importAll = (r)   => r.keys().map(r);
 const random    = (arr) => arr[Math.floor(Math.random() * arr.length)];
 
 let bg_pics = importAll( require.context('../img/', true, /\.jpg$/) );
 
-export function signin_frontpage(req, res) {
+export const signin_frontpage = (req, res) => {
 	res.send(
 		<html>
 			<head>

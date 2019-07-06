@@ -6,48 +6,14 @@ const rules = opts => [
 		test: /\.js$/,
 		exclude: /node_modules/,
 		use: [
-		{
-			loader: 'babel-loader',
-			options: {
-				presets: ['env', 'react'],
-				plugins: [
-					["transform-react-jsx", {
-						"pragma": "dom" // default pragma is React.createElement
-					}]
-				]
-			}
-		},
-		{ loader: 'ifdef-loader', options: opts },
-		]
-	},
-	{
-		test: /\.md$/,
-		use: [
-		{
-			loader: 'babel-loader',
-			options: {
-				presets: ['env', 'react'],
-				plugins: [
-					["transform-react-jsx", {
-						"pragma": "dom" // default pragma is React.createElement
-					}]
-				]
-			}
-		},
-		{ loader: './mdx-jsx-loader.js', options: {
-			process: (data) => {
-				return `
-				import dom, {MDXTag} from '../dom.js';
-				${data}
-				`
-			}	
-		}  },
+		  'babel-loader',
+		  { loader: 'ifdef-loader', options: opts },
 		]
 	},
 	{ test: /\.(png|jpg|gif)$/, loader: 'file-loader' },
 	{
-		test: /\.scss$/,
-		use: [ MiniCssExtractPlugin.loader,  "css-loader", "sass-loader" ]
+		test: /\.css$/,
+		use: [ MiniCssExtractPlugin.loader,  "css-loader"  ]
 	}
 ];
 
